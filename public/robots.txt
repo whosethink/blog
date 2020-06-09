@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://whosethink.github.io/code/sitemap.xml
