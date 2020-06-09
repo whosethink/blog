@@ -1,6 +1,6 @@
 # Be sure to change these!
-base_url = "https://whosethink.github.io/code"
-title = "whosethink"
+base_url = "https://whosethink.github.io/blog"
+title = "whosethink 博客"
 
 theme = "terminimal"
 
