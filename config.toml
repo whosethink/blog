@@ -14,7 +14,7 @@ taxonomies = [
 
 # Code highlighting
 highlight_code = true
-highlight_theme = "boron"
+highlight_theme = "monokai"
 
 [extra]
 
@@ -26,7 +26,7 @@ accent_color = "blue"
 # Enabling dark background will also modify primary font color
 # to be darker.
 # Defaults to accent color (or, if not accent color specified, to blue).
-background_color = "blue"
+background_color = "dark"
 
 # The logo text - defaults to "Terminimal theme"
 logo_text = "whosethink blog"
