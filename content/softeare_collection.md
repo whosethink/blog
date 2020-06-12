@@ -1,8 +1,8 @@
 +++
-title = "那些 好用/不错/酷酷 的软件"
+title = "那些 好用/不错 的软件"
 date = 2020-06-12
 
-[toxonomies]
+[taxonomies]
 tags = ["collect", "softwarwe"]
 +++
 

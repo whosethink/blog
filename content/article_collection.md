@@ -2,7 +2,7 @@
 title = "那些 不错/有趣 的文章"
 date = 2020-06-12
 
-[toxonomies]
+[taxonomies]
 tags = ["collect", "article"]
 +++
 
