@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>whosethink 博客</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="http://127.0.0.1:1111/style.css">
+    <link rel="stylesheet" href="http://127.0.0.1:1111/color/blue.css">
+
+        <link rel="stylesheet" href="http://127.0.0.1:1111/color/background_dark.css">
+    
+    <link rel="stylesheet" href="http://127.0.0.1:1111/font-hack-subset.css">
+
+        <link rel="shortcut icon" type="image&#x2F;svg" href="/favicon.svg">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="http://127.0.0.1:1111" style="text-decoration: none;">
+                    <div class="logo">
+                            whosethink blog
+                        </div>
+                </a>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <ul class="menu__inner">
+                
+                <li class="active"><a href="http://127.0.0.1:1111">Blog</a></li>
+            
+                <li><a href="http://127.0.0.1:1111/tags">Tags</a></li>
+            
+                <li><a href="http://127.0.0.1:1111/archive">Archive</a></li>
+            
+                <li><a href="http://127.0.0.1:1111/about">About</a></li>
+            
+                <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">Github</a></li>
+            </ul>
+        </nav>
+    
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="http://127.0.0.1:1111/arch-install-02/">Arch&#x2F;Linux 安装 (2)</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-06-12
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="http://127.0.0.1:1111/tags/arch/">#arch</a></span>
+    
+
+        
+        <div class="post-content">
+            <h3 id="qing-jing">情景</h3>
+<p>上一篇中安装好了 Arch, 作为日常使用, 图形界面还是要的. 虽然在那年, 仅仅看到了粗糙的黑框, 加上跳动的字符, 心已向往之. 这一篇中, 介绍基础桌面环境的安装, 常用软件以及桌面美化放到下篇.</p>
+<span id="continue-reading"></span>
+<p>更多的可以参阅这篇文档:</p>
+<ol>
+<li><a href="https://www.viseator.com/2017/05/19/arch_setup/">ArchLinux安装后的必须配置与图形界面安装教程</a></li>
+</ol>
+<h3 id="zhuo-mian-huan-jing">桌面环境</h3>
+<ol>
+<li>
+<p>连接网络(同上一篇中第一步)</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">wifi-menu
+</span></code></pre></li>
+<li>
+<p>显卡驱动</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># ADM GPU
+</span><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> xf86-video-amdgpu
+</span></code></pre>
+<p><strong>具体安装哪个显卡驱动, 参考 <a href="https://wiki.archlinux.org/index.php/Xorg">ArchWiki - Xorg (Driver installation 一节)</a>.</strong></p>
+</li>
+<li>
+<p>桌面服务 - Xorg</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> xorg
+</span></code></pre></li>
+<li>
+<p>桌面环境 - KDE</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> plasma
+</span></code></pre>
+<p><strong>在此没有直接安装 KDE 的常用软件(终端, 文件管理器等), 如果需要可通过<code>pacmac -S kde-applications</code>安装.</strong></p>
+</li>
+<li>
+<p>桌面管理器 - sddm</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> sddm
+</span><span style="color:#75715e;"># 启用 sddm
+</span><span style="color:#f8f8f2;">systemctl enable sddm
+</span></code></pre>
+<p>使用 sddm 的过程中, 出现过一次 boot 无法完成的情况, 记录在文末.</p>
+</li>
+<li>
+<p>网络配置</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">systemctl disable netctl
+</span><span style="color:#f8f8f2;">systemctl enable NetworkManaget
+</span><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> network-manager-applet
+</span></code></pre></li>
+<li>
+<p>创建普通用户</p>
+<p>KDE 登录界面, 默认不包含 root 用户, 一般情况也不使用 root 操作系统. 在此创建一个普通用户.</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># USERNAME 修改为你的用户名
+</span><span style="color:#f8f8f2;">useradd</span><span style="font-style:italic;color:#fd971f;"> -m</span><span style="color:#f8f8f2;"> USERNAME
+</span><span style="color:#75715e;"># 设置密码
+</span><span style="color:#f8f8f2;">passwd USERNAME
+</span></code></pre>
+<p>普通用户默认无法通过 sudo 执行命令. 可以像参考文档里一样, 把用户加入到 wheel 组, 然后赋予 wheel 组 sudo 权限. 也直接赋予用户 sudo 权限, 在 <code>/etc/sudoers</code> 里添加 <code>USERNAME ALL =(ALL) ALL</code> (USERNAME 改成具体的用户名)一行即可.</p>
+</li>
+<li>
+<p>重启</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">reboot
+</span></code></pre></li>
+</ol>
+<h3 id="wen-ti">问题</h3>
+<ol>
+<li>
+<p>boot 引导无法完成(在另一台机子上遇到)</p>
+<p>boot 引导过程中, 卡在了 <code>[OK] Reached target Graphical Interface</code> (grub 开启 verbose 模式)处, 无法进入终端.</p>
+<p>怀疑是显卡驱动的原因(有 N 卡), 禁用-卸载显卡驱动, 无果(一筹莫展);</p>
+<p>怀疑是什么什么配置出了问题, 恢复原配置后, 无果(心如死灰); </p>
+<p>chroot 进系统, 在日志文件中找到了一丝蛛丝马迹, sddm(莫不是 TA ?);</p>
+<p><code>systemctl disable sddm</code>, 重启, 可进入终端界面(心中暗喜);</p>
+<p>Google 寻之, <a href="https://github.com/sddm/sddm/issues/605">sddm/issues/605</a>, 可能是 sddm 的 bug, 重新安装 xorg-server, 久别重逢(笑逐颜开).</p>
+</li>
+<li>
+<p>屏幕亮度无法调节(AMD 4700U)</p>
+<p>亮度调无法调节屏幕亮度, 始终是最亮的.</p>
+<p>调整内核参数, 无果;</p>
+<p>重置显卡驱动, 无果;</p>
+<p>使用其他的亮度调节工具, 无果;</p>
+<p>内核升级到 5.7 版本, 无果;</p>
+<p>寻寻觅觅, 终于 <a href="https://askubuntu.com/questions/62249/how-do-you-change-brightness-color-and-sharpness-from-command-line">change brightness</a></p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 修改最后的数字来调节亮度
+</span><span style="color:#f8f8f2;">xrandr</span><span style="font-style:italic;color:#fd971f;"> --output </span><span style="color:#f8f8f2;">`xrandr</span><span style="font-style:italic;color:#fd971f;"> --current </span><span style="color:#f92672;">| </span><span style="color:#f8f8f2;">grep </span><span style="color:#e6db74;">&#39; connected&#39; </span><span style="color:#f92672;">| </span><span style="color:#f8f8f2;">cut</span><span style="font-style:italic;color:#fd971f;"> -f1 -d </span><span style="color:#e6db74;">&quot; &quot;</span><span style="color:#f8f8f2;">`</span><span style="font-style:italic;color:#fd971f;"> --brightness</span><span style="color:#f8f8f2;"> 0.5
+</span></code></pre>
+<p>虽然不是很美好, 但比起要在大半夜凝望最亮的屏, 呜.</p>
+</li>
+</ol>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                
+                    <span class="button next">
+                        <a href="http://127.0.0.1:1111/arch-install-01/">
+                            <span class="button__text">Arch&#x2F;Linux 安装 (1)</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2020
+ whosethink</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+<script src="/livereload.js?port=1024&amp;mindelay=10"></script></body>
+
+</html>
