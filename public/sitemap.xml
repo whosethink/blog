@@ -15,10 +15,28 @@
         <lastmod>2020-06-12</lastmod>
     </url>
     <url>
+        <loc>http://127.0.0.1:1111/arch-install-03/</loc>
+        <lastmod>2020-06-15</lastmod>
+    </url>
+    <url>
         <loc>http://127.0.0.1:1111/archive/</loc>
     </url>
     <url>
+        <loc>http://127.0.0.1:1111/article-collection/</loc>
+        <lastmod>2020-06-12</lastmod>
+    </url>
+    <url>
         <loc>http://127.0.0.1:1111/page/1/</loc>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:1111/page/2/</loc>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:1111/page/3/</loc>
+    </url>
+    <url>
+        <loc>http://127.0.0.1:1111/softeare-collection/</loc>
+        <lastmod>2020-06-12</lastmod>
     </url>
     <url>
         <loc>http://127.0.0.1:1111/tags/</loc>
