@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>whosethink 博客</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://whosethink.github.io/blog/style.css">
+    <link rel="stylesheet" href="https://whosethink.github.io/blog/color/blue.css">
+
+        <link rel="stylesheet" href="https://whosethink.github.io/blog/color/background_dark.css">
+    
+    <link rel="stylesheet" href="https://whosethink.github.io/blog/font-hack-subset.css">
+
+        <link rel="shortcut icon" type="image&#x2F;svg" href="/favicon.svg">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://whosethink.github.io/blog" style="text-decoration: none;">
+                    <div class="logo">
+                            whosethink blog
+                        </div>
+                </a>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <ul class="menu__inner">
+                
+                <li class="active"><a href="https://whosethink.github.io/blog">Blog</a></li>
+            
+                <li><a href="https://whosethink.github.io/blog/tags">Tags</a></li>
+            
+                <li><a href="https://whosethink.github.io/blog/archive">Archive</a></li>
+            
+                <li><a href="https://whosethink.github.io/blog/about">About</a></li>
+            
+                <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">Github</a></li>
+            </ul>
+        </nav>
+    
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://whosethink.github.io/blog/arch-install-01/">Arch&#x2F;Linux 安装 (1)</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-06-10
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://whosethink.github.io/blog/tags/arch/">#arch</a></span>
+    
+
+        
+        <div class="post-content">
+            <h3 id="qing-jing">情景</h3>
+<p>在此之前, 我一直是 Ubunut 用户, 16.04 -&gt; 18.04 -&gt; 20.04. 随着时间的堆积, 一丝丝隐隐的不安慢慢在我心底弥散. 仿佛屋宅的墙壁在褪色, 照片在变黄的感觉, 我知道我需要一些改变. 走上小船, 解开缆绳, 漂吧.</p>
+<span id="continue-reading"></span>
+<p>这篇文章的安装步骤是针对我自身的情况, 有一些预先的前提. 更详细的安装教程可参阅</p>
+<ul>
+<li><a href="https://www.viseator.com/2017/05/17/arch_install/">以官方Wiki的方式安装ArchLinux</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/installation_guide">ArckWiki - Installation guide</a></li>
+</ul>
+<p>我的本子是 HP Zhan66 AMD 4700U, 引导方式是 EFI, 网络环境是 wifi, 需要安装的磁盘为 /dev/nvm0n1.</p>
+<h3 id="arch-an-zhuang">Arch 安装</h3>
+<ol>
+<li>
+<p>连接网络(wifi)</p>
+<p>输入 <code>wifi-menu</code>, 选择需要连接的 wifi, 输入配置文件名称(此处提供了默认名称), 接下来就是输入 wifi 密码. 如果一切顺利, 终端没有指示出错误, oh yes!</p>
+<p>在连接 wifi 的过程中, 我遇到一些小问题, 记录在文末. 如果你也不幸遇到了, 希望对你有所帮助, 毕竟连不上网络, 那多急人哎.</p>
+</li>
+<li>
+<p>校准时钟</p>
+<p>使用 ntp 网络时间服务来校准时钟</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">timedatectl set-ntp true
+</span></code></pre>
+<p>查看时间是否正确</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 输出结果的第一行为本地时间
+</span><span style="color:#f8f8f2;">timedatectl status
+</span></code></pre></li>
+<li>
+<p>磁盘分区</p>
+<p>看看系统下有哪些磁盘, 目标磁盘在其中否</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">fdisk</span><span style="font-style:italic;color:#fd971f;"> -l
+</span></code></pre>
+<p>磁盘分区, 我要安装 Arch 的磁盘为 /dev/nvm0n1, 输入以下命令</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">fdisk /dev/nvm0n1
+</span></code></pre>
+<p>接下来在 fdisk 下输入命令(<strong>会出现Partition #1 contains a ext4 signature 之类的信息, 输入 Y 即可. 此未包含在下列命令中</strong>):</p>
+<ol>
+<li>
+<p>创建 GPT 分区表, 输入命令: g</p>
+</li>
+<li>
+<p>创建 EFI 分区, 依次输入命令: n, Enter, +1G, t, 1, 1</p>
+</li>
+<li>
+<p>创建 root 分区: 依次输入命令: n, Enter, Enter</p>
+</li>
+<li>
+<p>fdisk -l 检查分区是否正确</p>
+</li>
+<li>
+<p>保存, 输出命令: w</p>
+</li>
+</ol>
+<p><strong>命令解释(以创建 EFI 分区为例):</strong></p>
+<ol>
+<li>
+<p>n: 创建一个新的分区</p>
+</li>
+<li>
+<p>Enter: 直接回车, 表示使用默认值</p>
+</li>
+<li>
+<p>+1G: 分区大小为 1G</p>
+</li>
+<li>
+<p>t: 设置分区类型</p>
+</li>
+<li>
+<p>1: 为第一个分区设置类型</p>
+</li>
+<li>
+<p>1: 类型为 1 (分区类型可通过 l 命令查看)</p>
+</li>
+</ol>
+</li>
+<li>
+<p>格式化分区</p>
+<p><strong>通过 fdisk -l 查看要格式化的分区</strong></p>
+<ol>
+<li>第一个分区(EFI 分区)格式化为 FAT32 格式:</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">mkfs.fat</span><span style="font-style:italic;color:#fd971f;"> -F32</span><span style="color:#f8f8f2;"> /dev/nvm0n1p1
+</span></code></pre>
+<ol start="2">
+<li>第二个分区格式化为 EXT4 格式:</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">mkfs.ext4 /dev/nvm0n1p2
+</span></code></pre></li>
+<li>
+<p>挂载分区</p>
+<ol>
+<li>创建 EFI 分区挂载点</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">mkdir /mnt/boot
+</span></code></pre>
+<ol start="2">
+<li>挂载 EFI 分区</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">mount /dev/nvm0n1p1 /mnt/boot
+</span></code></pre>
+<ol start="3">
+<li>挂载 root 分区</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">mount /dev/nvm0n1p2 /mnt
+</span></code></pre></li>
+<li>
+<p>安装基础包</p>
+<ol>
+<li>修改软件安装源(默认配置在国内比较慢)</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 备份默认配置
+</span><span style="color:#f8f8f2;">mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+
+</span><span style="color:#75715e;"># 设置安装源
+</span><span style="color:#66d9ef;">echo </span><span style="color:#e6db74;">&#39;Server = http://mirrors.zju.edu.cn/archlinux/$repo/os/$arch&#39; </span><span style="color:#f92672;">&gt;</span><span style="color:#f8f8f2;"> /etc/pacman.d/mirrirlist
+</span></code></pre>
+<ol start="2">
+<li>安装软件包到磁盘</li>
+</ol>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">pacstrap /mnt base base-devel linux linux-firmware
+</span></code></pre></li>
+<li>
+<p>生成 fstab 文件</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">genfstab</span><span style="font-style:italic;color:#fd971f;"> -L</span><span style="color:#f8f8f2;"> /mnt </span><span style="color:#f92672;">&gt;&gt;</span><span style="color:#f8f8f2;"> /mnt/etc/fstab
+</span></code></pre>
+<p>命令 <code>cat /mnt/etc/fstab</code> 查看 fstab 文件是否正确(应该包含 / 和 /boot 的信息). 我在这一步时遇到了问题, 记录在文末.</p>
+</li>
+<li>
+<p>更改 root 目录</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">arch-chroot /mnt
+</span></code></pre>
+<p>第 5 步中, 我将 /dev/nvm0n1p2 挂载到了 /mnt 下, 而 /dev/nvm0n1p2 就是安装 Arch 所在的磁盘. 进行完这一步后, 后续的操作就相当于在安装好后的 Arch 里操作, 也就是所做的操作会在之后的系统里生效. </p>
+<p>特别提一下这一步, 因为在之后我遇到一个问题, boot 引导无法完成, 进不去终端操作. 是使用 LiveOs, arch-chroot进去救砖的~~~. 会记录在后续图形界面安装文里.</p>
+</li>
+<li>
+<p>设置时区</p>
+<p>不清楚的话, 搜索一下该设置成哪个时区. <code>timedatectl list-timezones</code> 可以罗列出各时区.</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 设置时区为上海
+</span><span style="color:#f8f8f2;">ln</span><span style="font-style:italic;color:#fd971f;"> -sf</span><span style="color:#f8f8f2;"> /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+</span><span style="color:#75715e;"># 把时间信息写入硬件
+</span><span style="color:#f8f8f2;">hwclock</span><span style="font-style:italic;color:#fd971f;"> --systohc
+</span></code></pre></li>
+<li>
+<p>安装基础软件</p>
+<p>可以直接使用 <code>pacman -S</code> 来安装了, 一路回车.</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> vim dialog wpa_supplicant ntfs-3g networkmanager netctl
+</span></code></pre></li>
+<li>
+<p>设置语言环境</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 备份语言配置文件
+</span><span style="color:#f8f8f2;">mv /etc/locale.gen /etc/locale.gen.bak
+
+</span><span style="color:#75715e;"># 设置语言环境
+</span><span style="color:#66d9ef;">echo </span><span style="color:#e6db74;">&quot;zh_CN.UTF-8 UTF-8\nzh_HK.UTF-8 UTF-8\nzh_TW.UTF-8 UTF-8\nen_US.UTF-8 UTF-8&quot; </span><span style="color:#f92672;">&gt;</span><span style="color:#f8f8f2;"> /etc/locale.gen
+
+</span><span style="color:#75715e;"># 生成 locale
+</span><span style="color:#f8f8f2;">locale-gen
+</span></code></pre></li>
+<li>
+<p>修改 root 密码</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#f8f8f2;">passwd
+</span></code></pre>
+<p>会两次要求输入新密码, 密码不会在屏幕上显示, 输入完回车就行.</p>
+</li>
+<li>
+<p>生成引导项</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 安装软件
+</span><span style="color:#f8f8f2;">pacman</span><span style="font-style:italic;color:#fd971f;"> -S</span><span style="color:#f8f8f2;"> os-prober grub efibootmgr
+
+</span><span style="color:#75715e;"># 部署 grub
+</span><span style="color:#f8f8f2;">grub-install</span><span style="font-style:italic;color:#fd971f;"> --target</span><span style="color:#f92672;">=</span><span style="color:#f8f8f2;">x86_64-efi</span><span style="font-style:italic;color:#fd971f;"> --efi-directory</span><span style="color:#f92672;">=</span><span style="color:#f8f8f2;">/boot</span><span style="font-style:italic;color:#fd971f;"> --bootloader-id</span><span style="color:#f92672;">=</span><span style="color:#f8f8f2;">grub
+
+</span><span style="color:#75715e;"># 生成引导配置
+</span><span style="color:#f8f8f2;">grub-mkconfig</span><span style="font-style:italic;color:#fd971f;"> -o</span><span style="color:#f8f8f2;"> /boot/grub/grub.cfg
+</span></code></pre>
+<p>使用 <code>vim /boot/grub/grub.cfg</code> 查看配置项是否正确. 可搜索 menuentry, 看看有没有 Arch 和其他系统(如果有的话)的配置.</p>
+</li>
+<li>
+<p>重启</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 退出到 LiveOs 环境
+</span><span style="color:#66d9ef;">exit
+
+</span><span style="color:#75715e;"># 卸载 EFI 分区
+</span><span style="color:#f8f8f2;">umount /mnt/boot
+
+</span><span style="color:#75715e;"># 卸载 root 分区
+</span><span style="color:#f8f8f2;">umount /mnt
+</span><span style="color:#75715e;"># 重启
+</span><span style="color:#f8f8f2;">reboot //重启
+</span></code></pre></li>
+</ol>
+<h3 id="wen-ti-ji-lu">问题记录</h3>
+<ul>
+<li>
+<p>wifi-menu 连接 wifi 失败</p>
+<ol>
+<li>
+<p>缺少配置文件</p>
+<p>/etc/netctl/ 目录下没有相关 wifi 的配置文件.</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 复制 examples 下的配置文件, 修改相关项即可. 我这边是 wpa 的 wifi
+</span><span style="color:#f8f8f2;">cp /etc/netctl/examples/wireless-wpa /etc/netctl/MyWifi
+</span></code></pre>
+<p>然后修改 /etc/netctl/MyWifi 文件中的 ESSID(wifi 名称) 和 Key(wifi 密码)</p>
+</li>
+<li>
+<p>网卡被占用</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 如果网卡是 wlp2s0
+</span><span style="color:#f8f8f2;">ip link set wlp2s0 down
+</span></code></pre>
+<p><code>ip link</code> 可以列出当前的网卡. 无线网卡通常是 w...</p>
+</li>
+<li>
+<p>网络配置文件名称</p>
+<p>出现过一次, 不是很确定... 默认的配置文件名会是 wlp2s0-wifiname 这样, 然后这个配置文件就创建失败. 去掉前缀, 使用 wifiname 作为配置名创建成功.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>fstab 缺少 boot 分区信息
+安装过程第 7 步中, 查看时缺少 EFI 分区的信息, 原因是 EFI 分区不知道去哪了.</p>
+<pre style="background-color:#272822;">
+<code><span style="color:#75715e;"># 删除无效的 fstab 文件
+</span><span style="color:#f8f8f2;">rm /mnt/etc/fstab
+</span><span style="color:#75715e;"># 重新挂载 EFI 分区
+</span><span style="color:#f8f8f2;">mount /dev/nvm0n1p1 /mnt/boot
+</span><span style="color:#75715e;"># 重新生成 fstab 文件
+</span><span style="color:#f8f8f2;">genfstab</span><span style="font-style:italic;color:#fd971f;"> -L</span><span style="color:#f8f8f2;"> /mnt </span><span style="color:#f92672;">&gt;&gt;</span><span style="color:#f8f8f2;"> /mnt/etc/fstab
+</span></code></pre></li>
+</ul>
+<hr />
+<p>那天, 轻风浮动, 空气中传递着阵阵的浮躁; 那天, 阳光倾洒, 光热中弥散着隐隐的焦虑.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Thanks for reading! Read other posts?</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://whosethink.github.io/blog/softeare-collection/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">那些 好用&#x2F;不错 的软件</span>
+                        </a>
+                    </span>
+                
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2020
+ whosethink</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>
